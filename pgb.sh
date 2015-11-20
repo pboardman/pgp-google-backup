@@ -6,6 +6,7 @@ help_dialog()
   echo
   echo "Options:"
   echo "-t [directory] change the tmp directory where the encrypted data is placed"
+  echo "-o [name] change the name of the pgp file generated"
   exit 1
 }
 
@@ -19,11 +20,13 @@ dir_exist()
   fi
 }
 
+output_name="backup"
 tmp_dir=/tmp/
-while getopts "ht:" opt; do
+while getopts "ht:o:" opt; do
   case $opt in
     h) help_dialog;;
     t) tmp_dir=$OPTARG;;
+    o) output_name=$OPTARG;;
     ?) help_dialog;;
   esac
 done
@@ -52,7 +55,7 @@ dir_exist $tmp_dir
 # Encrypting the Directory
 date=$(date +%Y-%m-%d)
 bckp_out_dir=$tmp_dir$$
-filename=backup-$$-$date.tar.gz.gpg
+filename=$output_name-$$-$date.tar.gz.gpg
 gpg_output=$bckp_out_dir/$filename
 
 mkdir $bckp_out_dir
